@@ -1,0 +1,44 @@
+<p>
+	<%= label_tag("settings[tracker_alias]", l(:label_setting_tracker_alias)) %>
+	<%= text_field_tag 'settings[tracker_alias]', @settings['tracker_alias'] %>
+</p>
+<p>
+	<%= label_tag("settings[assigned_to_alias]", l(:label_setting_assigned_to_alias)) %>
+	<%= text_field_tag 'settings[assigned_to_alias]', @settings['assigned_to_alias'] %>
+</p>
+<%- tracker_ids = Tracker.find(:all) %>
+<p>
+  <%= label_tag("settings[tracker]", l(:label_setting_default_tracker_id)) %>
+  <%= select_tag("settings[tracker]", options_for_select([["", 0]] + tracker_ids.collect{|c| [c.name, c.id]}, (@settings["tracker"] || 0))) %>
+</p>
+<%- custom_fields_issues = CustomField.find(:all, :conditions => "type = 'IssueCustomField' and field_format = 'int'") %>
+<p>
+  <%= label_tag("settings[custom_field_id_uid]", l(:label_setting_custom_field_id_uid)) %>
+  <%= select_tag("settings[custom_field_id_uid]", options_for_select([["", 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings["custom_field_id_uid"] || 0))) %>
+</p>
+<%- custom_fields_issues = CustomField.find(:all, :conditions => "type = 'IssueCustomField' and field_format = 'string'") %>
+<p>
+  <%= label_tag("settings[custom_field_id_resource]", l(:label_setting_custom_field_id_resource)) %>
+  <%= select_tag("settings[custom_field_id_resource]", options_for_select([["", 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings["custom_field_id_resource"] || 0))) %>
+</p>
+<%- custom_fields_issues = CustomField.find(:all, :conditions => "type = 'IssueCustomField' and field_format = 'int'") %>
+<p>
+  <%= label_tag("settings[custom_field_id_calendar_uid]", l(:label_setting_custom_field_id_calendar_uid)) %>
+  <%= select_tag("settings[custom_field_id_calendar_uid]", options_for_select([["", 0]] + custom_fields_issues.collect{|c| [c.name, c.id]}, (@settings["custom_field_id_calendar_uid"] || 0))) %>
+</p>
+<p>
+  <%= label_tag("settings[export_xml_header]", l(:label_setting_export_xml_header)) %>
+  <%= text_area_tag("settings[export_xml_header]", @settings['export_xml_header'], :rows => 20, :cols => 60) %>
+</p>
+<p>
+  <%= label_tag("settings[export_xml_extended_attributes]", l(:label_setting_export_xml_extended_attributes)) %>
+  <%= text_area_tag("settings[export_xml_extended_attributes]", @settings['export_xml_extended_attributes'], :rows => 20, :cols => 60) %>
+</p>
+<p>
+  <%= label_tag("settings[export_xml_calendars]", l(:label_setting_export_xml_calendars)) %>
+  <%= text_area_tag("settings[export_xml_calendars]", @settings['export_xml_calendars'], :rows => 20, :cols => 60) %>
+</p>
+<p>
+  <%= label_tag("settings[export_xml_resources]", l(:label_setting_export_xml_resources)) %>
+  <%= text_area_tag("settings[export_xml_resources]", @settings['export_xml_resources'], :rows => 20, :cols => 60) %>
+</p>

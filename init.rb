@@ -1,22 +1,26 @@
 require 'redmine'
 
 Redmine::Plugin.register :redmine_loader do
-
   name 'Basic project file loader for Redmine'
+  author 'Simon Stearn, Andrew Hodgkinsons, Tobias Droste'
+  description 'Basic MSProject XML file loader'
+  version '2.0.0'
+  requires_redmine :version_or_higher => '2.0.0'
 
-  author 'Simon Stearn largely hacking Andrew Hodgkinsons trackrecord code (sorry Andrew)'
-
-  description 'Basic project file loader'
-
-  version '0.0.12'
-
-  requires_redmine :version_or_higher => '0.9.2'
-
-  # Commented out because it refused to work in development mode
-  default_tracker_name = 'Features' #Tracker.find_by_id( 1 ).name
+  default_tracker_id = '1'
   default_tracker_alias = 'Tracker'
+  default_assigned_to_alias = 'Resource'
 
-  settings :default => {'tracker' => default_tracker_name, 'tracker_alias' => default_tracker_alias }, :partial => 'settings/loader_settings'
+  settings :default => {'tracker' => default_tracker_id, 
+    'tracker_alias' => default_tracker_alias,
+    'assigned_to_alias' => default_assigned_to_alias,
+    'custom_field_id_uid' => '0',
+    'custom_field_id_resource' => '0',
+    'custom_field_id_calendar_uid' => '0',
+    'export_xml_header' => '',
+    'export_xml_extended_attributes' => '',
+    'export_xml_calendars' => '',
+    'export_xml_resources' => '' }, :partial => 'settings/loader_settings'
 
   project_module :project_xml_importer do
     permission :import_issues_from_xml, :loader => [:new, :create]
@@ -24,15 +28,5 @@ Redmine::Plugin.register :redmine_loader do
 
   menu :project_menu, :loader, { :controller => 'loader', :action => 'new' },
     :caption => :menu_caption, :after => :new_issue, :param => :project_id
-
-  # MS Project used YYYY-MM-DDTHH:MM:SS format. There no support of time zones, so time will be in UTC
-  ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
-    :ms_xml => lambda{ |time| time.utc.strftime("%Y-%m-%dT%H:%M:%S") }
-  )
-
-  # MS Project used YYYY-MM-DDTHH:MM:SS format. There no support of time zones, so time will be in UTC
-  ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
-    :ms_xml => lambda{ |time| time.utc.strftime("%Y-%m-%dT%H:%M:%S") }
-  )
 end
 
